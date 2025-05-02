@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import { ItemsProps } from "../App.tsx";
 import ItemCard from "./ItemCard.tsx";
+import { ItemsInterface } from "../api";
 
 interface Props {
-  items: ItemsProps[];
+  items: ItemsInterface[];
 }
 
 const ListItems = ({ items }: Props) => {
@@ -20,6 +20,6 @@ const Content = styled.div`
   width: 90%;
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 15px;
 `;
 export default ListItems;

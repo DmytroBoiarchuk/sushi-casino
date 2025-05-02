@@ -1,9 +1,11 @@
 import styled, { keyframes } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
-import { mockItemsProps } from "../App.tsx";
+import RedeemButton from "../components/BaseComponents/LinkButton.tsx";
+import { ItemsInterface } from "../api";
+import { mockItems } from "../pages/Home.tsx";
 
 type Props = {
-  item: mockItemsProps;
+  item: ItemsInterface;
   onClose: () => void;
 };
 
@@ -22,7 +24,7 @@ const WinModal = ({ item, onClose }: Props) => {
         >
           <Title>🎉 You won!</Title>
           <ImageWrapper>
-            <img src={item.image} alt={item.name} />
+            <img src={mockItems[0].image /*item.imageUrl */} alt={item.name} />
           </ImageWrapper>
           <ItemName>{item.name}</ItemName>
           <ButtonGroup>
@@ -100,32 +102,6 @@ const ButtonGroup = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`;
-
-const RedeemButton = styled.a`
-  text-decoration: none;
-  width: 100%;
-  background: linear-gradient(135deg, #ffd700, #ff8c00);
-  border: none;
-  padding: 12px 24px;
-  font-size: 16px;
-  color: #111;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  box-shadow:
-    0 0 10px #ff8c00,
-    0 0 20px #ffd700;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow:
-      0 0 15px #ff8c00,
-      0 0 30px #ffd700;
-  }
 `;
 
 const CloseButton = styled.button`

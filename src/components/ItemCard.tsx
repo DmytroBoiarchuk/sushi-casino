@@ -1,9 +1,10 @@
-import { ItemsProps, Rarity } from "../App.tsx";
 import styled from "styled-components";
 import { useEffect, useRef, useState } from "react";
+import { mockItems, Rarity } from "../pages/Home.tsx";
+import { ItemsInterface } from "../api";
 
 interface Props {
-  item: ItemsProps;
+  item: ItemsInterface;
 }
 
 const ItemCard = ({ item }: Props) => {
@@ -33,12 +34,15 @@ const ItemCard = ({ item }: Props) => {
 
   return (
     <Box rarity={item.rarity}>
-      <Image src={item.image} />
+      <Image src={mockItems[item.id - 1].image /*item.imageUrl*/} />
       <Description ref={descriptionRef}>
         <Text $isOpen={isOpen}>{item.description}</Text>
-        <Button onClick={toggleDescription}>
-          {isOpen ? "Hide" : "Description"}
-        </Button>
+        <Container>
+          <Button onClick={toggleDescription}>
+            {isOpen ? "Hide" : "Description"}
+          </Button>
+          <Probability>{item.probability}%</Probability>
+        </Container>
       </Description>
     </Box>
   );
@@ -53,16 +57,23 @@ const Box = styled.div<{ rarity: Rarity }>`
   padding: 10px;
 `;
 
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Probability = styled.span`
+  color: #242424;
+`;
 const Description = styled.div`
   position: absolute;
   bottom: 10px;
   left: 10px;
   right: 10px;
-  z-index: 100;
-  background: rgba(255, 255, 255, 0.8); /* полупрозрачный белый */
-  backdrop-filter: blur(5px); /* лёгкое размытие фона */
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* мягкая тень */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 3px;
   overflow: hidden;
 `;
@@ -87,6 +98,11 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
+
+  &:hover {
+    transform: scale(1.2);
+    transition: all 0.4s ease;
+  }
 `;
 
 export default ItemCard;
