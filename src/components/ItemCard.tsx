@@ -55,6 +55,12 @@ const Box = styled.div<{ rarity: Rarity }>`
   border-left: 10px solid
     ${({ theme, rarity }) => theme.rarityColors[rarity] || "#fff"};
   padding: 10px;
+
+  &:hover {
+    transform: scale(1.4);
+    z-index: 100;
+    transition: all 0.4s ease;
+  }
 `;
 
 const Container = styled.div`
@@ -98,11 +104,6 @@ const Image = styled.img`
   width: 100%;
   height: 100%;
   object-fit: contain;
-
-  &:hover {
-    transform: scale(1.2);
-    transition: all 0.4s ease;
-  }
 `;
 
 export default ItemCard;

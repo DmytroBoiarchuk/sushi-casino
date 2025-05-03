@@ -17,7 +17,6 @@ function Home() {
       <SushiLink href="https://neptunessushi.com/" target="_blank">
         Order more sushi
       </SushiLink>
-
       {items && <ListItems items={items} />}
       <InfoButton>
         <InfoModal />
@@ -39,6 +38,8 @@ const Logo = styled.img`
 `;
 
 const SushiLink = styled(LinkButton)`
+  display: flex;
+  justify-content: center;
   width: 200px;
 `;
 
