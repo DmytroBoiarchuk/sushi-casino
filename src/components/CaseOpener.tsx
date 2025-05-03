@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "./BaseComponents/BaseButton.tsx";
 import { getWinner, ItemsInterface } from "../api";
@@ -16,6 +16,7 @@ const duration = 5;
 
 const CaseOpener = ({ items }: Props) => {
   const [showWinnerModal, setShowWinnerModal] = useState(false);
+
   const handleResult = () => {
     setShowWinnerModal(true);
   };
@@ -64,7 +65,10 @@ const CaseOpener = ({ items }: Props) => {
           {extendedList.map((item, i) => (
             <PrizeSlot key={i} itemwidth={ITEM_WIDTH}>
               <Image
-                src={mockItems[0].image /*item.imageUrl*/}
+                src={
+                  mockItems[Math.floor(Math.random() * 9)]
+                    .image /*item.imageUrl*/
+                }
                 alt={item.name}
               />
             </PrizeSlot>

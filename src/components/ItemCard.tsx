@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { mockItems, Rarity } from "../pages/Home.tsx";
 import { ItemsInterface } from "../api";
 
@@ -10,6 +10,8 @@ interface Props {
 const ItemCard = ({ item }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const descriptionRef = useRef<HTMLDivElement>(null);
+
+  const TEMPORARY = useMemo(() => Math.floor(Math.random() * 9), []);
 
   const toggleDescription = () => {
     setIsOpen((prev) => !prev);
@@ -35,7 +37,7 @@ const ItemCard = ({ item }: Props) => {
   return (
     <Content>
       <ImageBox rarity={item.rarity}>
-        <Image src={mockItems[0].image /*item.imageUrl*/} />
+        <Image src={mockItems[TEMPORARY].image /*item.imageUrl*/} />
         <Probability>{item.probability}%</Probability>
         {/*<Description ref={descriptionRef}>*/}
         {/*  <Text $isOpen={isOpen}>{item.description}</Text>*/}
@@ -51,8 +53,9 @@ const ItemCard = ({ item }: Props) => {
     </Content>
   );
 };
+
 const Name = styled.p`
-  // color: ${({ theme }) => {}};
+  color: ${({ theme }) => theme.colors.white};
 `;
 
 const Content = styled.div``;
