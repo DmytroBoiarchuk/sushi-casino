@@ -11,6 +11,7 @@ import {
   spinDuration,
   VISIBLE_ITEMS_ON_SPINNER,
 } from "./Constants.ts";
+import { playSound } from "../../utils/utils.ts";
 
 interface Props {
   items: ItemsInterface[];
@@ -42,6 +43,7 @@ const CaseOpener = ({ items }: Props) => {
 
   const handleStart = async () => {
     if (isSpinning) return;
+    playSound("/spin.mp3");
     setAnimateOffset(true);
 
     const winner: ItemsInterface | null =
