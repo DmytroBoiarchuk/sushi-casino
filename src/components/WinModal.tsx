@@ -74,6 +74,7 @@ const ModalContent = styled(motion.div)`
   max-width: 400px;
   width: 90%;
   animation: ${glow} 2s infinite ease-in-out;
+  margin: 0 5px;
 `;
 
 const Title = styled.h2`

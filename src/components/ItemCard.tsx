@@ -30,21 +30,22 @@ const Name = styled.p`
 `;
 
 const Content = styled.div`
-  width: 180px;
+  width: 155px;
   position: relative;
-  margin-top: 50px;
   background-color: ${({ theme }) => theme.colors.dark};
   border-radius: 15px;
-  &:hover {
-    transform: scale(1.4);
-    z-index: 100;
-    transition: all 0.4s ease;
+  @media ${({ theme }) => theme.breakpoints.desktop} {
+    &:hover {
+      transform: scale(1.4);
+      z-index: 100;
+      transition: all 0.4s ease;
+    }
   }
 `;
 
 const ImageBox = styled.div<{ rarity: Rarity }>`
   position: relative;
-  width: 150px;
+  width: 145px;
   height: 150px;
   border-left: 10px solid
     ${({ theme, rarity }) => theme.rarityColors[rarity] || "#fff"};

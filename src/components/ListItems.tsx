@@ -17,9 +17,14 @@ const ListItems = ({ items }: Props) => {
 };
 
 const Content = styled.div`
+  margin-top: 50px;
   width: 90%;
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 15px;
+  @media ${({ theme }) => theme.breakpoints.mobile} {
+    gap: 10px;
+  }
 `;
 export default ListItems;

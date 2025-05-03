@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import styled from "styled-components";
 import Button from "../BaseComponents/BaseButton.tsx";
 import { getWinner, ItemsInterface } from "../../api";
@@ -8,10 +8,14 @@ import { mockItems } from "../../pages/Home.tsx";
 import {
   repeatCount,
   SPIN_ITEM_WIDTH,
+  SPIN_ITEM_WIDTH_MOBILE,
   spinDuration,
-  VISIBLE_ITEMS_ON_SPINNER,
+  VISIBLE_ITEMS_MOBILE,
+  VISIBLE_ITEMS_PC,
+  VISIBLE_ITEMS_TABLET,
 } from "./Constants.ts";
 import { playSound } from "../../utils/utils.ts";
+import { useMediaQuery } from "../../hooks/useMediaQuery.ts";
 
 interface Props {
   items: ItemsInterface[];
@@ -19,6 +23,8 @@ interface Props {
 
 const CaseOpener = ({ items }: Props) => {
   const [showWinnerModal, setShowWinnerModal] = useState(false);
+  const [isLessThan540] = useMediaQuery("(max-width: 540px)");
+  const [isLessThan820] = useMediaQuery("(max-width: 820px)");
 
   const handleResult = () => {
     setShowWinnerModal(true);
@@ -29,6 +35,19 @@ const CaseOpener = ({ items }: Props) => {
   const [extendedList, setExtendedList] = useState<ItemsInterface[]>([]);
   const [animateOffset, setAnimateOffset] = useState<boolean>(true);
   const containerRef = useRef<HTMLDivElement>(null);
+  const width = useMemo(
+    () => (isLessThan540 ? SPIN_ITEM_WIDTH_MOBILE : SPIN_ITEM_WIDTH),
+    [isLessThan540],
+  );
+  const visibleItems = useMemo(
+    () =>
+      isLessThan540
+        ? VISIBLE_ITEMS_MOBILE
+        : isLessThan820
+          ? VISIBLE_ITEMS_TABLET
+          : VISIBLE_ITEMS_PC,
+    [isLessThan540, isLessThan820],
+  );
 
   useEffect(() => {
     if (items.length > 0) {
@@ -36,19 +55,18 @@ const CaseOpener = ({ items }: Props) => {
     }
   }, [items]);
 
-  const CENTER_OFFSET =
-    (SPIN_ITEM_WIDTH * VISIBLE_ITEMS_ON_SPINNER) / 2 - SPIN_ITEM_WIDTH / 2;
+  const CENTER_OFFSET = (width * visibleItems) / 2 - width / 2;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleStart = async () => {
     if (isSpinning) return;
-    playSound("/spin.mp3");
     setAnimateOffset(true);
 
     const winner: ItemsInterface | null =
       inputRef.current && (await getWinner(inputRef.current?.value));
     if (!winner) return;
+    playSound("/spin.mp3");
 
     setWinner(winner);
     setIsSpinning(true);
@@ -61,9 +79,7 @@ const CaseOpener = ({ items }: Props) => {
     setExtendedList(newList);
 
     const distance =
-      TARGET_INDEX * SPIN_ITEM_WIDTH -
-      CENTER_OFFSET +
-      (Math.random() * 50 - 25);
+      TARGET_INDEX * width - CENTER_OFFSET + (Math.random() * 50 - 25);
 
     setOffset(-distance);
 
@@ -81,10 +97,11 @@ const CaseOpener = ({ items }: Props) => {
   return (
     <Content>
       <SlotsWrapper
-        width={SPIN_ITEM_WIDTH * VISIBLE_ITEMS_ON_SPINNER}
+        width={width * visibleItems}
+        itemwidth={width}
         ref={containerRef}
       >
-        {isSpinning && <ScreenOverlay />}
+        {isSpinning && <ScreenOverlay width={width} />}
         <Slots
           animate={{ x: offset }}
           transition={{
@@ -93,11 +110,11 @@ const CaseOpener = ({ items }: Props) => {
           }}
         >
           {extendedList.map((item, i) => (
-            <PrizeSlot key={i} itemwidth={SPIN_ITEM_WIDTH}>
+            <PrizeSlot key={i} itemwidth={width}>
               <Image
                 src={
                   mockItems[Math.floor(Math.random() * 9)].image
-                  // item.imageUrl
+                  //item.imageUrl
                 }
                 alt={item.name}
               />
@@ -105,12 +122,8 @@ const CaseOpener = ({ items }: Props) => {
           ))}
         </Slots>
         <Marker
-          leftoffset={
-            (SPIN_ITEM_WIDTH * VISIBLE_ITEMS_ON_SPINNER) / 2 -
-            SPIN_ITEM_WIDTH / 2 -
-            3
-          }
-          itemwidth={SPIN_ITEM_WIDTH}
+          leftoffset={(width * visibleItems) / 2 - width / 2 - 3}
+          itemwidth={width}
         />
       </SlotsWrapper>
       <PromoCodeInput>
@@ -128,7 +141,7 @@ const CaseOpener = ({ items }: Props) => {
   );
 };
 
-const ScreenOverlay = styled.div`
+const ScreenOverlay = styled.div<{ width: number }>`
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.7);
@@ -136,19 +149,25 @@ const ScreenOverlay = styled.div`
   z-index: 105;
 
   mask-image: radial-gradient(
-    circle 120px at 50% 80px,
-    transparent 130px,
-    black 130px
+    circle ${({ width }) => `${width / 1.4}px at 50% ${width / 2.125}px`},
+    transparent ${({ width }) => width / 1.3}px,
+    black ${({ width }) => width / 1.3}px
   );
-  -webkit-mask-image: radial-gradient(
-    circle 120px at 50% 80px,
-    transparent 130px,
-    black 130px
-  );
+
+  // @media ${({ theme }) => theme.breakpoints.mobile} {
+  //   mask-image: radial-gradient(
+  //     circle 80px at 50% 60px,
+  //     transparent 90px,
+  //     black 90px
+  //   );
+  // }
 `;
 
 const Content = styled.div`
   padding: 20px;
+  @media ${({ theme }) => theme.breakpoints.mobile} {
+    padding: 0;
+  }
 `;
 
 const Input = styled.input`
@@ -176,12 +195,15 @@ const PromoCodeInput = styled.div`
   align-items: center;
 `;
 
-const SlotsWrapper = styled.div<{ width: number }>`
+const SlotsWrapper = styled.div<{ width: number; itemwidth?: number }>`
   overflow: hidden;
   width: ${({ width }) => width}px;
   border: 2px solid #333;
   position: relative;
   margin-top: 10px;
+  @media ${({ theme }) => theme.breakpoints.mobile} {
+    height: ${({ itemwidth }) => itemwidth}px;
+  }
 `;
 
 const Slots = styled(motion.div)`
@@ -201,6 +223,10 @@ const PrizeSlot = styled.div<{ itemwidth: number }>`
   color: #fff;
   font-weight: bold;
   padding: 3px;
+
+  @media ${({ theme }) => theme.breakpoints.mobile} {
+    height: ${({ itemwidth }) => itemwidth}px;
+  }
 `;
 
 const Marker = styled.div<{ itemwidth: number; leftoffset: number }>`
@@ -216,7 +242,7 @@ const Marker = styled.div<{ itemwidth: number; leftoffset: number }>`
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 50%;
+    left: calc(50% + 2px);
     width: 2px;
     background-color: ${({ theme }) => theme.colors.yellow};
   }

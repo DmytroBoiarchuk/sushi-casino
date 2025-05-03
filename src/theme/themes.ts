@@ -15,4 +15,9 @@ export const theme: DefaultTheme = {
     red: "rgb(255,0,0)",
     yellow: "rgb(227,184,1)",
   },
+  breakpoints: {
+    mobile: "only screen and (max-width: 540px)",
+    tablet: "only screen and (max-width: 820px)",
+    desktop: "only screen and (min-width: 1024px)",
+  },
 };

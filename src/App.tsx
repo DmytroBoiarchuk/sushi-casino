@@ -2,7 +2,7 @@ import Home from "./pages/Home.tsx";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "styled-components";
-import { theme } from "./theme/colors.ts";
+import { theme } from "./theme/themes.ts";
 
 const queryClient = new QueryClient();
 
