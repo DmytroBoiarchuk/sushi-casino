@@ -8,4 +8,9 @@ export const theme: DefaultTheme = {
     EPIC: "rgb(211, 44, 230)",
     LEGENDARY: "rgb(235, 75, 75)",
   },
+  // colors: {
+  //   white: {
+  //     50: "rgb(255,255,255)",
+  //   },
+  // },
 };

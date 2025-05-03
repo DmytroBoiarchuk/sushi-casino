@@ -64,7 +64,7 @@ const CaseOpener = ({ items }: Props) => {
           {extendedList.map((item, i) => (
             <PrizeSlot key={i} itemwidth={ITEM_WIDTH}>
               <Image
-                src={mockItems[item.id - 1].image /*item.imageUrl*/}
+                src={mockItems[0].image /*item.imageUrl*/}
                 alt={item.name}
               />
             </PrizeSlot>

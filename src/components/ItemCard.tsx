@@ -33,22 +33,31 @@ const ItemCard = ({ item }: Props) => {
   }, []);
 
   return (
-    <Box rarity={item.rarity}>
-      <Image src={mockItems[item.id - 1].image /*item.imageUrl*/} />
-      <Description ref={descriptionRef}>
-        <Text $isOpen={isOpen}>{item.description}</Text>
-        <Container>
-          <Button onClick={toggleDescription}>
-            {isOpen ? "Hide" : "Description"}
-          </Button>
-          <Probability>{item.probability}%</Probability>
-        </Container>
-      </Description>
-    </Box>
+    <Content>
+      <ImageBox rarity={item.rarity}>
+        <Image src={mockItems[0].image /*item.imageUrl*/} />
+        <Probability>{item.probability}%</Probability>
+        {/*<Description ref={descriptionRef}>*/}
+        {/*  <Text $isOpen={isOpen}>{item.description}</Text>*/}
+        {/*  <Container>*/}
+        {/*    <Button onClick={toggleDescription}>*/}
+        {/*      {isOpen ? "Hide" : "Description"}*/}
+        {/*    </Button>*/}
+        {/*  </Container>*/}
+        {/*</Description>*/}
+      </ImageBox>
+      <Name>{item.name}</Name>
+      <Description>{item.description}</Description>
+    </Content>
   );
 };
+const Name = styled.p`
+  // color: ${({ theme }) => {}};
+`;
 
-const Box = styled.div<{ rarity: Rarity }>`
+const Content = styled.div``;
+
+const ImageBox = styled.div<{ rarity: Rarity }>`
   position: relative;
   width: 150px;
   height: 150px;
@@ -71,17 +80,17 @@ const Container = styled.div`
 const Probability = styled.span`
   color: #242424;
 `;
-const Description = styled.div`
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(5px);
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 3px;
-  overflow: hidden;
+const Description = styled.p`
+  //position: absolute;
+  //bottom: 10px;
+  //left: 10px;
+  //right: 10px;
+  //background: rgba(255, 255, 255, 0.8);
+  //backdrop-filter: blur(5px);
+  //border-radius: 8px;
+  //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  //padding: 3px;
+  //overflow: hidden;
 `;
 
 const Text = styled.div<{ $isOpen: boolean }>`

@@ -9,5 +9,6 @@ declare module "styled-components" {
       EPIC: string;
       LEGENDARY: string;
     };
+    // colors: Record<string, {}>;
   }
 }
