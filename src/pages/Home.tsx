@@ -1,23 +1,28 @@
-import CaseOpener from "./../components/CaseOpener";
+import CaseOpener from "../components/CaseOpener/CaseOpener.tsx";
 import styled from "styled-components";
 import ListItems from "./../components/ListItems.tsx";
 import { useItemsSet } from "../api";
 import LinkButton from "../components/BaseComponents/LinkButton.tsx";
 import InfoModal from "../components/BaseComponents/InfoModal.tsx";
+import { useMemo } from "react";
 
 export type Rarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
 
 function Home() {
   const { items /* isError, isLoading */ } = useItemsSet();
-
+  const sortedItems = useMemo(
+    () => items?.sort((a, b) => b.probability - a.probability),
+    [items],
+  );
+  console.log(sortedItems);
   return (
     <Main>
       <Logo src="/LogoCasiBLACK.svg" alt="Lucky Sushi Logo" />
-      <CaseOpener items={items || []} />
+      <CaseOpener items={sortedItems || []} />
       <SushiLink href="https://neptunessushi.com/" target="_blank">
         Order more sushi
       </SushiLink>
-      {items && <ListItems items={items} />}
+      {sortedItems && <ListItems items={sortedItems} />}
       <InfoButton>
         <InfoModal />
       </InfoButton>

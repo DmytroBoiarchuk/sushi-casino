@@ -26,7 +26,8 @@ const WinModal = ({ item, onClose }: Props) => {
           <ImageWrapper>
             <img src={mockItems[0].image /*item.imageUrl */} alt={item.name} />
           </ImageWrapper>
-          <ItemName>{item.name}</ItemName>
+          <Name>{item.name}</Name>
+          <Description>{item.description}</Description>
           <ButtonGroup>
             <RedeemButton
               href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"
@@ -41,6 +42,8 @@ const WinModal = ({ item, onClose }: Props) => {
     </AnimatePresence>
   );
 };
+
+const Description = styled.p``;
 
 const Overlay = styled(motion.div)`
   position: fixed;
@@ -90,10 +93,9 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const ItemName = styled.div`
+const Name = styled.div`
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 20px;
 `;
 
 const ButtonGroup = styled.div`
@@ -108,7 +110,9 @@ const CloseButton = styled.button`
   cursor: pointer;
   background: transparent;
   border: 0;
-  width: 40px;
+  width: 70px;
+  color: ${({ theme }) => theme.colors.white};
+  font-size: 20px;
 `;
 
 export default WinModal;

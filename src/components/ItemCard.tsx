@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { mockItems, Rarity } from "../pages/Home.tsx";
 import { ItemsInterface } from "../api";
 
@@ -8,66 +8,33 @@ interface Props {
 }
 
 const ItemCard = ({ item }: Props) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const descriptionRef = useRef<HTMLDivElement>(null);
-
   const TEMPORARY = useMemo(() => Math.floor(Math.random() * 9), []);
-
-  const toggleDescription = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        descriptionRef.current &&
-        !descriptionRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   return (
     <Content>
       <ImageBox rarity={item.rarity}>
         <Image src={mockItems[TEMPORARY].image /*item.imageUrl*/} />
-        <Probability>{item.probability}%</Probability>
-        {/*<Description ref={descriptionRef}>*/}
-        {/*  <Text $isOpen={isOpen}>{item.description}</Text>*/}
-        {/*  <Container>*/}
-        {/*    <Button onClick={toggleDescription}>*/}
-        {/*      {isOpen ? "Hide" : "Description"}*/}
-        {/*    </Button>*/}
-        {/*  </Container>*/}
-        {/*</Description>*/}
       </ImageBox>
       <Name>{item.name}</Name>
       <Description>{item.description}</Description>
+      <Probability>{item.probability}%</Probability>
     </Content>
   );
 };
 
 const Name = styled.p`
+  padding-left: 5px;
+  margin: 0;
   color: ${({ theme }) => theme.colors.white};
+  font-weight: bold;
 `;
 
-const Content = styled.div``;
-
-const ImageBox = styled.div<{ rarity: Rarity }>`
+const Content = styled.div`
+  width: 180px;
   position: relative;
-  width: 150px;
-  height: 150px;
-  border-left: 10px solid
-    ${({ theme, rarity }) => theme.rarityColors[rarity] || "#fff"};
-  padding: 10px;
-
+  margin-top: 50px;
+  background-color: ${({ theme }) => theme.colors.dark};
+  border-radius: 15px;
   &:hover {
     transform: scale(1.4);
     z-index: 100;
@@ -75,47 +42,41 @@ const ImageBox = styled.div<{ rarity: Rarity }>`
   }
 `;
 
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
+const ImageBox = styled.div<{ rarity: Rarity }>`
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-left: 10px solid
+    ${({ theme, rarity }) => theme.rarityColors[rarity] || "#fff"};
 `;
 
-const Probability = styled.span`
-  color: #242424;
+const Probability = styled.div`
+  width: 30px;
+  text-align: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 2px;
+  border-radius: 5px;
+  box-shadow: 0 0 3px 1px white;
+  background-color: ${({ theme }) => theme.colors.dark};
+  color: ${({ theme }) => theme.colors.white};
 `;
+
 const Description = styled.p`
-  //position: absolute;
-  //bottom: 10px;
-  //left: 10px;
-  //right: 10px;
-  //background: rgba(255, 255, 255, 0.8);
-  //backdrop-filter: blur(5px);
-  //border-radius: 8px;
-  //box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  //padding: 3px;
-  //overflow: hidden;
-`;
-
-const Text = styled.div<{ $isOpen: boolean }>`
-  max-height: ${({ $isOpen }) => ($isOpen ? "200px" : "0")};
-  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-  transition: all 0.4s ease;
-  font-size: 14px;
-  color: #333;
-  line-height: 1.4;
-  user-select: none;
-  pointer-events: ${({ $isOpen }) => ($isOpen ? "auto" : "none")};
-  overflow: auto;
-`;
-const Button = styled.button`
-  color: white;
-  cursor: pointer;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 0 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const Image = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: 0 0 5px 0;
 `;
 
 export default ItemCard;
